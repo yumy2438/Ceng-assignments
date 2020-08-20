@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<html lang="tr-TR">
+<head>
+    <meta charset="UTF-8">
+    <title>Hoşgeldiniz!</title>
+</head>
+<body>
+<div id='div1'>
+<div id="div1.1">
+<font color="red"><p>The password is wrong!</p> </font>
+</div>
+Username:
+<input id="username" type="text" name="username"/>
+<br/>
+Password:
+<input id="password" type="password" name="password"/>
+<br/>
+<button onClick="Log(); return false;">login</button>
+<br/>
+</div>
+<div id="div2">
+<center><h2>You need to verify</h2>
+<div id="div2.1">
+  <font color="red"><p>The verification number is wrong!</p> </font>
+</div>
+Verification number:
+<input id="vcode" type="text" name="verificationnumber"/>
+<br/>
+<button onClick="verify(); return false;">Verify</button>
+</center>
+</div>
+<div id="div3">
+<h2>Başarıyla Giriş Yaptınız!</h2>
+<p id="hosgeldinUsername"></p>
+<p hidden id="chosenitemo"></p>
+<p hidden id="chosenitemt"></p>
+<hr>
+Command:
+<br/>
+    <select id="command" name="command">
+        <option value="changepassword ">Change password</option>
+        <option value="lookup ">Look up the emails in</option>
+        <option value="friend ">Send a friendship to</option>
+        <option value="setfriend ">Set a friend state as</option>
+        <option value="itemlist ">Look item list of</option>
+        <option value="watch ">Watch the user:</option>
+        <option value="additem ">Add the item:</option>
+        <option value="chooseitem ">Choose the item:</option>
+        <option value="detail ">Detail</option>
+        <option value="view ">View</option>
+        <option value="delete ">Delete</option>
+        <option value="comment ">Make a comment:</option>
+        <option value="locate ">Change the location:</option>
+        <option value="announce ">Make an announcement:</option>
+        <option value="search ">Search:</option>
+        <option value="borrowedreq ">Make a borrow request:</option>
+        <option value="borrowedby ">The item is borrowed by:</option>
+        <option value="returned ">The item is returned to the location:</option>
+        <option value="listcomments ">List the comments</option>
+        <option value="rate ">Give the rate:</option>
+        <option value="getrating ">Get the rating</option>
+        <option value="setstate ">Set the state:</option>
+        <option value="watch2 ">Watch the item:</option>
+    </select>
+    <input id="commandvalue" name="commandvalue"/>
+    <button onClick="getCommand(); return false;">submit</button>
+<br/>
+<hr>
+<p id="cvp"></p>
+<hr>
+<p>Notifications and announces: </p>
+  <ul id='notiflist'>
+    </ul>
+</div>
+
+<script>
+  document.getElementById('div3').style.display='none'
+  document.getElementById('div2').style.display='none'
+  document.getElementById('div1.1').style.display='none'
+  document.getElementById('div2.1').style.display='none'
+            document.getElementById('chosenitemo').innerHTML=""
+            document.getElementById('chosenitemt').innerHTML=""
+
+      var serveripport = '127.0.0.1:5675'
+  
+const sleep = (milliseconds) => {
+  return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
+
+  async function Log() {
+      // add a new message id to listen to
+      var uname = document.getElementById('username').value;
+      var pass = document.getElementById('password').value;
+      if (ws.waitids.indexOf(uname) >= 0) { // already listening
+        console.log(ws.waitids)
+        var m = { command: 'login', username: uname,password: pass};
+        ws.socket.send(JSON.stringify(m));
+      }
+      else {
+        ws.waitids.push(uname);
+        // restart websocket with new information
+        ws.createwebsocket();
+        await sleep(200)
+        var m = { command: 'login', username: uname,password: pass};
+        ws.socket.send(JSON.stringify(m));
+
+
+      }
+    
+  }
+  function verify() {
+      var uname = document.getElementById('hosgeldinUsername').innerHTML
+      var code =document.getElementById('vcode').value
+              var m = { command: 'verify', username: uname,code: code};
+        ws.socket.send(JSON.stringify(m));
+
+  }
+  function getCommand() {
+      var uname = document.getElementById('hosgeldinUsername').innerHTML
+      var commande = document.getElementById('command').value + document.getElementById('commandvalue').value
+      var owner = document.getElementById('chosenitemo').innerHTML
+      var titlee =document.getElementById('chosenitemt').innerHTML
+      var m = { command: 'other', username: uname,commande: commande,owner:owner, titlee: titlee};
+      console.log(m)
+        ws.socket.send(JSON.stringify(m));
+
+  }
+    function wseventhandler (event) {
+      var messages = JSON.parse(event.data);
+      if(messages[0]=='girildi' && messages[1]=="1") {
+        document.getElementById('div1').style.display='none'
+        document.getElementById('div3').style.display='block'
+        document.getElementById('hosgeldinUsername').innerHTML=messages[2]
+      }
+      else if (messages[0]=='girildi' && messages[1]=="0") {
+  
+  document.getElementById('div1.1').style.display='block'
+        document.getElementById('div1').style.display='none'
+        document.getElementById('div2').style.display='block'
+        document.getElementById('hosgeldinUsername').innerHTML=messages[2]
+
+      }
+      else if (messages[0]=="hatalisifre"){
+        document.getElementById('div1.1').style.display='block'
+
+      }
+      else if(messages[0]=='verify') {
+        if (messages[1]==1) {
+            document.getElementById('div1').style.display='none'
+            document.getElementById('div2').style.display='none'
+            document.getElementById('div1.1').style.display='none'
+            document.getElementById('div3').style.display='block'
+
+        }
+        else {
+            document.getElementById('div2.1').style.display='block'
+
+        }
+      }
+      else if(messages[0]=='other') {
+                console.log(messages)
+        document.getElementById('cvp').innerHTML=messages[1]
+        }
+
+        else if(messages[0]=="choosei") {
+          document.getElementById('cvp').innerHTML=messages[1]
+          if (messages[1]!="There is no item like this.") {
+            document.getElementById('chosenitemo').innerHTML=messages[2]
+            document.getElementById('chosenitemt').innerHTML=messages[3]
+          }
+
+        }
+
+
+        else if(messages[0]=='notifs') {
+                console.log(messages)
+          var uname = document.getElementById('hosgeldinUsername').innerHTML
+          var arrayLength = messages.length;
+          for (var i = 1; i < arrayLength; i++) {
+              console.log(messages[i]);
+              mid=messages[i]
+                data_array = mid.split(' ')
+                console.log(data_array)
+                if (data_array[2]==uname) {
+                  var messlist = document.getElementById('notiflist'),
+                  messitem = document.createElement('li');
+                  messitem.innerHTML = mid
+                  messlist.appendChild(messitem);
+                }
+                else {
+                  continue
+                }
+              //Do something
+          }     
+
+      }
+
+    }
+    function Ws (ip) {
+      this.socket = undefined;
+      this.waitids = [];
+    }
+    Ws.prototype.createwebsocket = function () {
+      if (this.socket)  // if already connected close it and reopen
+        this.socket.close();
+      if (this.waitids.length < 1)  // no subsciption
+        return; 
+      // create a web socket
+          var socket = new WebSocket('ws://' + serveripport);
+      var wids = this.waitids;
+      socket.onopen = function() {
+        // send id list for notifications
+        socket.send(JSON.stringify(wids));
+      }
+          socket.onmessage = wseventhandler;
+      this.socket = socket;
+    }
+    var ws = new Ws();
+
+        </script>
+
+</body>
+</html>

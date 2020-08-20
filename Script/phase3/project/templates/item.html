@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+<html lang="tr-TR">
+<head>
+    <meta charset="UTF-8">
+    <title>Hoşgeldiniz!</title>
+</head>
+<body>
+<hr>
+<p>---borrowedby---</p>
+{{item}}
+<form method="post" action="/borrowedby">
+Please enter the user name:
+<input type="text" name="textforborrowedby"/>
+<br/>
+Please enter the return date:
+<input type="text" name="textforborrowedby2"/>
+<br/>
+{% csrf_token %}
+<input type="submit" name="enterborrowedby" value="ok"/>
+</form>
+<p> {{ donutborrowedby }} </p>
+<hr>
+
+<p>---borrowedreq---</p>
+{{item}}
+<form method="post" action="/borrowedreq">
+Please click the button for borrow request:
+</br>
+{% csrf_token %}
+<input type="submit" name="enterborrowedreq" value="ok"/>
+</form>
+<p> {{ donutborrowedreq }} </p>
+<hr>
+
+<hr>
+<p>---returned---</p>
+<form method="post" action="/returned">
+Please enter the location:
+<input type="text" name="textforreturned"/>
+<br/>
+{% csrf_token %}
+<input type="submit" name="enterreturned" value="ok"/>
+</form>
+<p> {{ donutreturned }} </p>
+<hr>
+
+<hr>
+<p>---comment---</p>
+<form method="post" action="/comment">
+Please enter the comment:
+<input type="text" name="textforcomment"/>
+<br/>
+{% csrf_token %}
+<input type="submit" name="entercomment" value="ok"/>
+</form>
+<p> {{ donutcomment }} </p>
+<hr>
+
+<hr>
+<p>---list comments---</p>
+<form method="post" action="/commentlist">
+Please click the button if you want to see the comments:
+{% csrf_token %}
+<input type="submit" name="entercommentlist" value="ok"/>
+</form>
+<p> {{ donutcommentlist }} </p>
+<hr>
+
+<hr>
+<p>---rate---</p>
+<form method="post" action="/rate">
+Please enter the rating:
+<input type="text" name="textforrate"/>
+<br/>
+{% csrf_token %}
+<input type="submit" name="enterrate" value="ok"/>
+</form>
+<p> {{ donutrate }} </p>
+<hr>
+
+<hr>
+<p>---get rating---</p>
+<form method="post" action="/getrating">
+{% csrf_token %}
+<input type="submit" name="entergetrating" value="ok"/>
+</form>
+<p> {{ donutgetrating }} </p>
+<hr>
+
+<hr>
+<p>---locate---</p>
+<form method="post" action="/locate">
+Please enter the location:
+<input type="text" name="textforlocate"/>
+<br/>
+{% csrf_token %}
+<input type="submit" name="enterlocate" value="ok"/>
+</form>
+<p> {{ donutlocate }} </p>
+<hr>
+
+<hr>
+<p>---set state---</p>
+<form method="post" action="/setstate">
+Please enter the state type(view,detail,borrow,comment,search):
+<input type="text" name="textforsetstate"/>
+<br/>
+Please enter the state(closed,everyone,friends,closefriends):
+<input type="text" name="textforsetstate2"/>
+<br/>
+{% csrf_token %}
+<input type="submit" name="entersetstate" value="ok"/>
+</form>
+<p> {{ donutsetstate }} </p>
+<hr>
+
+
+<hr>
+<p>---watch an item---</p>
+<form method="post" action="/watchitem">
+Please enter the watched method(comment,borrow):
+<input type="text" name="textforwatchitem2"/>
+<br/>
+{% csrf_token %}
+<input type="submit" name="enterwatchitem" value="ok"/>
+</form>
+<p> {{ donutwatchitem }} </p>
+<hr>
+
+<hr>
+<p>---view---</p>
+<form method="post" action="/view">
+{% csrf_token %}
+<input type="submit" name="enterview" value="ok"/>
+</form>
+<p> {{ donutview }} </p>
+<hr>
+
+<hr>
+<p>---detail---</p>
+<form method="post" action="/detail">
+{% csrf_token %}
+<input type="submit" name="enterdetail" value="ok"/>
+</form>
+<p> {{ donutdetail }} </p>
+<hr>
+
+<hr>
+<p>---announce---</p>
+<form method="post" action="/announce">
+Please enter the type:
+<input type="text" name="textforannounce"/>
+<br/>
+Please enter the message:
+<input type="text" name="textforannounce2"/>
+<br/>
+{% csrf_token %}
+<input type="submit" name="enterannounce" value="ok"/>
+</form>
+<p> {{ donutannouence }} </p>
+<hr>
+
+<hr>
+<p>---delete---</p>
+<form method="post" action="/delete">
+Please press the delete button if you are sure to delete the item:
+{% csrf_token %}
+<input type="submit" name="enterdelete" value="ok"/>
+</form>
+<p> {{ donutdelete }} </p>
+<hr>
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+<html lang="tr-TR">
+<head>
+    <meta charset="UTF-8">
+    <title>Hoşgeldiniz!</title>
+</head>
+<body>
+
+  {% ifequal "0" isv %}
+<center><h2>You need to verify</h2>
+    {% ifequal 1 ba %}
+  <font color="red"><p>The verification number is wrong!</p> </font>
+    {% endifequal %}
+<form method="post" action="/home">
+Verification number:
+<input type="text" name="verificationnumber"/>
+<br/>
+{% csrf_token %}
+<input type="submit" name="enter" value="enter"/>
+</form>
+</center>
+  {% else %}
+<center><h2>Başarıyla Giriş Yaptınız!</h2>
+<b>Hoşgeldin</b> : {{ request.user.email }}
+<hr>
+<b>Son Giriş Tarihiz : </b> {{ request.user.last_login }}
+<hr>
+
+<hr>
+<p>---notifications---</p>
+<form method="post" action="/getnotifs">
+{% csrf_token %}
+<input type="submit" name="entergetnotifs" value="Get Notifications"/>
+</form>
+<table>
+  {% for r in donutnotifs %}
+    {% cycle '<tr>' '' '' '' %}
+      <p>{{ r }}</p>
+    {% cycle '' '' '' '</tr>' %}
+  {% endfor %}
+</table>
+<table>
+  {% for r in donutnotifs2 %}
+    {% cycle '<tr>' '' '' '' %}
+      <p>{{r}}</p>
+    {% cycle '' '' '' '</tr>' %}
+  {% endfor %}
+</table>
+<hr>
+
+<hr>
+<p>---change password---</p>
+<form method="post" action="/changepassword">
+old password:
+<input type="password" name="textforchangepass"/>
+<br/>
+new password:
+<input type="password" name="textforchangepass2"/>
+<br/>
+{% csrf_token %}
+<input type="submit" name="enterchangepass" value="ok"/>
+</form>
+<p> {{ donutchangepass }} </p>
+<hr>
+
+<hr>
+<p>---lookup---</p>
+<form method="post" action="/lookup">
+Email list seperated with comma:
+<input type="text" name="liste"/>
+<br/>
+{% csrf_token %}
+<input type="submit" name="enterlookup" value="ok"/>
+</form>
+<p> {{ donut }} </p>
+<hr>
+
+<hr>
+<p>---Send Friendship Request---</p>
+<form method="post" action="/friend">
+Email of the user you want to send request:
+<input type="text" name="textforfriend"/>
+<br/>
+{% csrf_token %}
+<input type="submit" name="enterfriend" value="ok"/>
+</form>
+<p> {{ donutfriend }} </p>
+<hr>
+
+<hr>
+<p>---Change Friendship Status or Accept Requests---</p>
+<form method="post" action="/setfriend">
+Email of the user:
+<input type="text" name="textforsetfriend"/>
+<br/>
+Choose the state of the friend:
+<select name="textforsetfriend2">
+    <option value="nofriend">No friend</option>
+    <option value="friend">Friend</option>
+    <option value="closefriend">Close friend</option>
+</select>
+    <br>
+{% csrf_token %}
+<input type="submit" name="entersetfriend" value="ok"/>
+</form>
+<p> {{ donutsetfriend }} </p>
+<hr>
+
+<hr>
+<p>---listitems---</p>
+<form method="post" action="/listitems">
+Email of the user:
+<input type="text" name="textforlistitems"/>
+<br/>
+{% csrf_token %}
+<input type="submit" name="enterlistitems" value="ok"/>
+</form>
+<p> {{ donutlistitems }} </p>
+<hr>
+
+<hr>
+<p>---watch a user---</p>
+<form method="post" action="/watchuser">
+Email of the user:
+<input type="text" name="textforwatchuser"/>
+<br/>
+Choose the state:
+<select name="textforwatchuser2">
+    <option value="detail">Detail</option>
+    <option value="borrow">Borrow</option>
+</select>
+<br/>
+{% csrf_token %}
+<input type="submit" name="enterwatchuser" value="ok"/>
+</form>
+<p> {{ donutwatchuser }} </p>
+<hr>
+
+<hr>
+<p>---choose an item---</p>
+<form method="post" action="/chooseitem">
+Email of the owner:
+<input type="text" name="textforchooseitem"/>
+<br/>
+Title of the item:
+<input type="text" name="textforchooseitem2"/>
+<br/>
+{% csrf_token %}
+<input type="submit" name="enterchooseitem" value="ok"/>
+</form>
+<p> {{ donutchooseitem }} </p>
+<hr>
+
+
+<hr>
+<p>---add an item---</p>
+<form method="post" action="/additem">
+Unique id of the item(if you enter this value, the other fields will be ignored.):
+<input type="text" name="textforadditem"/>
+<br/>
+Title of the item:
+<input type="text" name="textforadditem2"/>
+<br/>
+Type of the item:
+<input type="text" name="textforadditem3"/>
+<br/>
+Artist of the item:
+<input type="text" name="textforadditem4"/>
+<br/>
+Genre of the item:
+<input type="text" name="textforadditem5"/>
+<br/>
+Year of the item:
+<input type="text" name="textforadditem6"/>
+<br/>
+{% csrf_token %}
+<input type="submit" name="enteradditem" value="ok"/>
+</form>
+<p> {{ donutadditem }} </p>
+<hr>
+
+
+<hr>
+<p>---search---</p>
+<form method="post" action="/search">
+Please enter the search text:
+<input type="text" name="textforsearch2"/>
+<br/>
+Please enter the genre:
+<input type="text" name="textforsearch3"/>
+<br/>
+Please enter the year:
+<input type="text" name="textforsearch4"/>
+<br/>
+Do you want to borrow it(yes,no):
+<input type="text" name="textforsearch5"/>
+<br/>
+{% csrf_token %}
+<input type="submit" name="entersearch" value="ok"/>
+</form>
+<p> {{ donutsearch }} </p>
+<hr>
+
+<a href="/logout"><font color="red">Logout!</font></a>
+</center>
+{% endifequal %}
+</body>
+</html>
